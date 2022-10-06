@@ -20,10 +20,10 @@ void pushsym(strack *s,char sym)
 
 int popnum(strack *s)
 {
-	int data=-1;
+	int data=0;
 	if(s->top==0)
 	{
-		printf("error");
+		printf("error\n");
 	}else
 	{
 		node *p=s->elem;
@@ -39,7 +39,7 @@ char popsym(strack *s)
 	char sym=0;
 	if(s->top==0)
 	{
-		printf("error");
+		printf("error\n");
 	}else
 	{
 		node *p=s->elem;
@@ -86,8 +86,11 @@ int priorityleft(char s)
 			out=0;
 			break;
 		case')':
-			out=5;
+			out=6;
 			break;	
+		case'^':
+			out=5;
+			break;
 	}
 	return out;
 }
@@ -109,12 +112,31 @@ int priorityright(char s)
 			out=3;
 			break;
 		case'(':
-			out=5;
+			out=6;
 			break;
 		case')':
 			out=0;
 			break;
+		case'^':
+			out=5;
+			break;
 	}
 	return out;
 }
-
+void freestrack(node *s)
+{
+	node *p,*q;
+			for(p=s ;p;p=q )
+			{
+				q=p->next ;
+				free(p);
+			}
+}
+int power(int base,int index)
+{
+	if(index==0)
+	return 1;
+	if(index==1)
+	return base;
+	return base*power(base,index-1); 
+ } 

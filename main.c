@@ -46,22 +46,23 @@ int main()
 
 				else
 				{
-					if(exp[i]=='('&&exp[i+1]=='-')														//当“（”后直接加-表示下一个数是负数，记录并将下一位数转化为负数存入数据栈
+					if(exp[i]=='('&&exp[i+1]=='-')															//当“（”后直接加-表示下一个数是负数，记录并将下一位数转化为负数存入数据栈
 					{
 						pushsym(&s_sym,exp[i]);
 						minus=-1;
 						i+=2;
 					}
-					if(s_sym.elem ==NULL||priorityleft(s_sym.elem->symbol)<priorityright(exp[i]) )		//当符号栈不为空或右边符号优先级高于左边，将符号放到栈
+					if(s_sym.elem ==NULL||priorityleft(s_sym.elem->symbol)<priorityright(exp[i]) )			//当符号栈不为空或右边符号优先级高于左边，将符号放到栈
 					{
 						pushsym(&s_sym,exp[i]);
 						i++;
 						continue;
 					}
-					if(s_sym.elem ->symbol=='('&&exp[i]==')')											//将括号中数据运算完后去掉括号
+					if(s_sym.elem ->symbol=='('&&exp[i]==')')												//将括号中数据运算完后去掉括号
 					{
 						popsym(&s_sym);
 						i++;
+						continue; 
 					}
 
 					if((exp[i]==0&&s_sym.top!=0)||priorityleft(s_sym.elem->symbol)>priorityright(exp[i]))	//当运算未结束或左运算符优先级高于右
@@ -88,6 +89,11 @@ int main()
 								num2=popnum(&s_num);
 								pushnum(&s_num,num2/num1);
 								break;
+							case'^':
+								num1=popnum(&s_num);
+								num2=popnum(&s_num);
+								pushnum(&s_num,power(num2,num1));
+								break; 
 						}
 					}
 
