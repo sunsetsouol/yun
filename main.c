@@ -1,183 +1,123 @@
-#include "strack.h"
+#include "function.h"
 int main()
 {
-
-	int menu=0;
-	do
+	list *head=NULL;
+	int menu;
+	FILE *fp=fopen("maillist","r");
+	if(fp)
 	{
-		printf("输入1计算,输入2进行进制转换，输入-1结束\n");
-		scanf("%d",&menu);
-		if(menu==1)
+		char end[20]="end";
+		list *p;
+		int isleap=0;
+		do
 		{
-			strack s_num,s_sym;
-			initstrack(&s_num);
-			initstrack(&s_sym);
-			char exp[200];
-			printf("请输入表达式\n");
-			scanf("%s",&exp);
-			int tem=0;
-			int num1,num2;
-			int i=0;
-			int minus=0;
-			if(exp[0]=='-')									//判断开头是否为负数，如果是则记下来将第一个读的数转化为负数存到数据栈
+			list *p=(list *)malloc(sizeof(list));
+			fscanf(fp,"%s %s %s",&(p->Name) ,&(p->Number) ,&(p->Relationship));
+			p->next =NULL;
+			list *last=head;
+			if(strcmp(p->Name ,end)!=0)
 			{
-				i++;
-				minus=-1;
-			}
-			while(exp[i]!=0||s_sym.top !=0)					//当表达式不为空并且符号不为空，运算继续
-			{
-				if(exp[i]>='0'&&exp[i]<='9')				//当下位为数字，用asc求出数字
+				if(last)
 				{
-					tem+=exp[i]-'0';
-					i++;
-					if(exp[i]<'0'||exp[i]>'9')				//当下位不是数字，将数字存进栈，如果是数字继续
+					while(last->next )
 					{
-						if(minus==-1)
-							tem=-tem;
-						pushnum(&s_num,tem);
-						tem=0;
-						minus=0;
+						last=last->next ;
 					}
-					else
-					{
-						tem*=10;
-					}
+					last->next =p;
 				}
-
 				else
 				{
-					if(exp[i]=='('&&exp[i+1]=='-')															//当“（”后直接加-表示下一个数是负数，记录并将下一位数转化为负数存入数据栈
-					{
-						pushsym(&s_sym,exp[i]);
-						minus=-1;
-						i+=2;
-					}
-					if(s_sym.elem ==NULL||priorityleft(s_sym.elem->symbol)<priorityright(exp[i]) )			//当符号栈不为空或右边符号优先级高于左边，将符号放到栈
-					{
-						pushsym(&s_sym,exp[i]);
-						i++;
-						continue;
-					}
-					if(s_sym.elem ->symbol=='('&&exp[i]==')')												//将括号中数据运算完后去掉括号
-					{
-						popsym(&s_sym);
-						i++;
-						continue; 
-					}
-
-					if((exp[i]==0&&s_sym.top!=0)||priorityleft(s_sym.elem->symbol)>priorityright(exp[i]))	//当运算未结束或左运算符优先级高于右
-					{
-						switch(popsym(&s_sym))
-						{
-							case'+':
-								num1=popnum(&s_num);
-								num2=popnum(&s_num);
-								pushnum(&s_num,num1+num2);
-								break;
-							case'-':
-								num1=popnum(&s_num);
-								num2=popnum(&s_num);
-								pushnum(&s_num,num2-num1);
-								break;
-							case'*':
-								num1=popnum(&s_num);
-								num2=popnum(&s_num);
-								pushnum(&s_num,num1*num2);
-								break;
-							case'/':
-								num1=popnum(&s_num);
-								num2=popnum(&s_num);
-								pushnum(&s_num,num2/num1);
-								break;
-							case'^':
-								num1=popnum(&s_num);
-								num2=popnum(&s_num);
-								pushnum(&s_num,power(num2,num1));
-								break; 
-						}
-					}
-
+					head=p;
 				}
-
+			}else
+			{
+				isleap=-1;
 			}
-			printf("%d\n",s_num.elem ->data);
+		}
+		while(isleap!=-1);
+	}
+	fclose(fp);
 
-			freestrack(s_num.elem );
-			freestrack(s_sym.elem );
+	do
+	{
+		printf("\n\n\n\n\n\n\n");
+		printf("\t\t\t\t|--------------------通讯录--------------------|\n");
+		printf("\t\t\t\t|0.结束程序\n");
+		printf("\t\t\t\t|1.录入联系人信息\n");
+		printf("\t\t\t\t|2.查询联系人信息\n");
+		printf("\t\t\t\t|3.修改联系人信息\n");
+		printf("\t\t\t\t|4.删除联系人\n\n\n");
+		printf("输入相应编号进行相关操作\n"); 
+		scanf("%d",&menu);
+		system("cls");
+		if(menu==1)
+		{
+			printf("请依次输入姓名 号码 关系 \n");
+			head=add (head);
+			printf("录入成功");
+		}
+		if(menu==4)
+		{
+			list *q,*p;
+			printf("请输入要删除的联系人姓名\n");
+			p=listsearch(head);
+			if(p)
+				free(p);
+			else
+				printf("没有找到该联系人\n");
+
 		}
 		if(menu==2)
 		{
-			int base1,base2;
-			printf("请输入要将几进制的数转化为几进制的数\n");
-			scanf("%d %d",&base1,&base2);
-			char num[200];
-			printf("请输入%d进制下的数\n",base1);
-			scanf("%s",&num);
-			int i=0,tem;
-			strack number;
-			number.top =0;
-			number.elem =NULL;
-			while(num[i]!=0)
+			list *p;
+			printf("请输入要查询的联系人名字\n");
+			p=listsearch(head);
+			if(p)
+				printf("号码；%s,关系；%s\n",p->Number ,p->Relationship );
+			else
+				printf("没有找到该联系人\n");
+		}
+		if(menu==3)
+		{
+			list *p;
+			printf("请输入要修改联系人姓名\n");
+			p=listsearch(head);
+			if(p)
 			{
-				if(num[i]>='0'&&num[i]<='9')
-				{
-					tem=num[i]-'0';
-				}
-				else
-				{
-					switch(num[i])
-					{
-						case'A':
-							tem=10;
-							break;
-						case'B':
-							tem=11;
-							break;
-						case'C':
-							tem=12;
-							break;
-						case'D':
-							tem=13;
-							break;
-						case'E':
-							tem=14;
-							break;
-						case'F':
-							tem=15;
-							break;
-					}
-				}
-
-				pushnum(&number,tem) ;
-				i++;
-				tem=0;
+				printf("请输入号码 关系\n");
+				scanf("%s %s",&p ->Number ,&p ->Relationship ) ;
 			}
-			int j=number.top ;
-			for(i=0; i<j ; i++)
+			else
+				printf("没有找到该联系人\n");
+		}
+		if(menu==5) 
+		{
+			list *p;
+			for(p=head;p;p=p->next )
 			{
-				tem+=popnum(&number)*power(base1,i );
+				printf("姓名；%s，号码；%s，关系；%s",p->Name ,p->Number ,p->Relationship );
 			}
-			int out=tem;
-			j=0;
-			while(tem!=0)
-			{
-				tem/=base2;
-				j++;
-			}
-			tem=out;
-			out=0;
-			for(i=j; i>0; i--)
-			{
-				out*=10;
-				out+=tem/power(base2,i-1);
-				tem=tem%power(base2,i-1);
-			}
-			printf("%d进制下该数为%d\n",base2,out);
-			freestrack(number.elem );
+			
 		}
 
-
 	}
-	while(menu!=-1);
+	while(menu!=0);
+
+	list *p=head;
+	fp=fopen("maillist","w");
+	if(fp)
+	{
+		while(p)
+		{
+			fprintf(fp,"%s\n%s\n%s\n",p->Name ,p->Relationship ,p->Number );
+			p=p->next ;
+		}
+	}
+	else
+		printf("无法打开该文件\n");
+
+	fprintf(fp,"end\n \n \n \n");
+	fclose(fp);
+
 	return 0;
 }
