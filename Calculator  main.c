@@ -62,7 +62,7 @@ int main()
 					{
 						popsym(&s_sym);
 						i++;
-						continue; 
+						continue;
 					}
 
 					if((exp[i]==0&&s_sym.top!=0)||priorityleft(s_sym.elem->symbol)>priorityright(exp[i]))	//当运算未结束或左运算符优先级高于右
@@ -87,13 +87,18 @@ int main()
 							case'/':
 								num1=popnum(&s_num);
 								num2=popnum(&s_num);
+								if (num1==0)
+								{
+									printf("error");
+									goto end;
+								}
 								pushnum(&s_num,num2/num1);
 								break;
 							case'^':
 								num1=popnum(&s_num);
 								num2=popnum(&s_num);
 								pushnum(&s_num,power(num2,num1));
-								break; 
+								break;
 						}
 					}
 
@@ -179,5 +184,6 @@ int main()
 
 	}
 	while(menu!=-1);
+end:
 	return 0;
 }
