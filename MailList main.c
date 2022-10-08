@@ -29,7 +29,8 @@ int main()
 				{
 					head=p;
 				}
-			}else
+			}
+			else
 			{
 				isleap=-1;
 			}
@@ -47,8 +48,8 @@ int main()
 		printf("\t\t\t\t|2.查询联系人信息\n");
 		printf("\t\t\t\t|3.修改联系人信息\n");
 		printf("\t\t\t\t|4.删除联系人\n");
-		printf("\t\t\t\t|5.输出所有联系人\n");
-		printf("输入相应编号进行相关操作\n\n\n"); 
+		printf("\t\t\t\t|5.输出所有联系人\n\n\n");
+		printf("输入相应编号进行相关操作\n");
 		scanf("%d",&menu);
 		system("cls");
 		if(menu==1)
@@ -59,13 +60,7 @@ int main()
 		}
 		if(menu==4)
 		{
-			list *q,*p;
-			printf("请输入要删除的联系人姓名\n");
-			p=listsearch(head);
-			if(p)
-				free(p);
-			else
-				printf("没有找到该联系人\n");
+			head=listdelete(head);
 
 		}
 		if(menu==2)
@@ -91,16 +86,14 @@ int main()
 			else
 				printf("没有找到该联系人\n");
 		}
-		if(menu==5) 
+		if(menu==5)
 		{
 			list *p;
-			for(p=head;p;p=p->next )
+			for(p=head; p; p=p->next )
 			{
 				printf("姓名；%s，号码；%s，关系；%s\n",p->Name ,p->Number ,p->Relationship );
 			}
-			
 		}
-
 	}
 	while(menu!=0);
 
@@ -119,6 +112,5 @@ int main()
 
 	fprintf(fp,"end\n \n \n \n");
 	fclose(fp);
-
 	return 0;
 }

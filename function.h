@@ -12,4 +12,5 @@ typedef struct MailList
 } list;
 list* add(list *Phead);
 list *listsearch(list *Phead);
+list *listdelete(list *Phead);
 #endif

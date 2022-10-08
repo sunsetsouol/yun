@@ -36,3 +36,40 @@ list *listsearch(list *Phead)
 	}
 	return p;
 }
+list *listdelete(list *Phead)
+{
+	list *p,*q=Phead;
+	char name[20];
+	printf("请输入要删除的联系人姓名\n");
+	scanf("%s",&name);
+	if(strcmp(Phead->Name ,name)==0)
+	{
+		Phead=q->next ;
+		free(q);
+	}
+	else
+	{
+		p=Phead->next ;
+		while(p && strcmp(p->Name ,name)!=0)
+		{
+			q=p;
+			p=q->next ;
+		}
+		if(p)
+	{
+		if(p->next )
+		{
+			q->next =p->next ;
+			free(p);
+		}
+		else
+		{
+			free(p);
+			q->next =NULL;
+		}
+	}
+	else
+		printf("没有找到该联系人\n");
+	}
+	return Phead;
+}
