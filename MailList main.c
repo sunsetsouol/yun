@@ -46,8 +46,9 @@ int main()
 		printf("\t\t\t\t|1.录入联系人信息\n");
 		printf("\t\t\t\t|2.查询联系人信息\n");
 		printf("\t\t\t\t|3.修改联系人信息\n");
-		printf("\t\t\t\t|4.删除联系人\n\n\n");
-		printf("输入相应编号进行相关操作\n"); 
+		printf("\t\t\t\t|4.删除联系人\n");
+		printf("\t\t\t\t|5.输出所有联系人\n");
+		printf("输入相应编号进行相关操作\n\n\n"); 
 		scanf("%d",&menu);
 		system("cls");
 		if(menu==1)
@@ -95,7 +96,7 @@ int main()
 			list *p;
 			for(p=head;p;p=p->next )
 			{
-				printf("姓名；%s，号码；%s，关系；%s",p->Name ,p->Number ,p->Relationship );
+				printf("姓名；%s，号码；%s，关系；%s\n",p->Name ,p->Number ,p->Relationship );
 			}
 			
 		}
